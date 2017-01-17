@@ -1,0 +1,38 @@
+C+ app/webserver.cpp
+C+ app/configuration.cpp
+C+ app/application.cpp
+AR out/build/app_app.a
+LD out/build/app.out
+
+#Memory / Section info:
+------------------------------------------------------------------------------
+
+out/build/app.out:     file format elf32-xtensa-le
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         000003c4  3ffe8000  3ffe8000  000000e0  2**4
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .rodata       00002c60  3ffe83d0  3ffe83d0  000004b0  2**4
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          000079e8  3ffeb030  3ffeb030  00003110  2**4
+                  ALLOC
+  3 .text         00006e04  40100000  40100000  00003110  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  4 .irom0.text   00050b0e  4020a000  4020a000  00009f20  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+------------------------------------------------------------------------------
+# Generating image...
+Generate firmware images successully in folder out/firmware.
+Done
+# Generating spiffs_bin
+Checking for spiffs files
+web directory exists. Creating out/firmware/spiff_rom.bin
+Creating rom 'out/firmware/spiff_rom.bin' of size 0x80000 (524288) bytes.
+Adding files in directory 'web'.
+Added 'config.html' to spiffs (11645 bytes).
+Added 'favicon.ico' to spiffs (318 bytes).
+Added 'index.html' to spiffs (10105 bytes).
+Added 'disk.png' to spiffs (620 bytes).
+Added 'index_2.html' to spiffs (1268 bytes).
+out/firmware/spiff_rom.bin---------->0x5B000
