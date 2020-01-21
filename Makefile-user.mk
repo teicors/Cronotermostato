@@ -1,10 +1,10 @@
-
+## Local build configuration
 ## Parameters configured here will override default and ENV values.
 ## Uncomment and change examples:
 
 ## Add your source directories here separated by space
-# MODULES = app
-# EXTRA_INCDIR = include
+ MODULES = app 
+ EXTRA_INCDIR = include
 
 ## ESP_HOME sets the path where ESP tools and SDK are located.
 ## Windows:
@@ -18,7 +18,7 @@ ESP_HOME = /opt/esp-open-sdk
 # SMING_HOME = c:/tools/sming/Sming 
 
 ## MacOS / Linux
-SMING_HOME = /opt/SmingRTOS/sming
+SMING_HOME = /home/angelo/Software/Sming-3.8.1/Sming
 
 ## COM port parameter is reqruied to flash firmware correctly.
 ## Windows: 
@@ -26,10 +26,15 @@ SMING_HOME = /opt/SmingRTOS/sming
 
 ## MacOS / Linux:
 # COM_PORT = /dev/tty.usbserial
+COM_PORT = /dev/ttyUSB3
 
 ## Com port speed
-COM_SPEED	= 115200
-COM_SPEED_ESPTOOL	= 1000000
+#COM_SPEED	= 115200
+
+## Com port speed for terminal
+#COM_SPEED_SERIAL = 76800
+#COM_SPEED_SERIAL = 74880
+
 
 ## Configure flash parameters (for ESP12-E and other new boards):
 # SPI_MODE = dio
@@ -37,3 +42,5 @@ COM_SPEED_ESPTOOL	= 1000000
 ## SPIFFS options
 # DISABLE_SPIFFS = 1
 SPIFF_FILES = web
+
+RBOOT_ENABLED=1

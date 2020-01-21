@@ -1,16 +1,25 @@
 #ifndef INCLUDE_CONFIGURATION_H_
 #define INCLUDE_CONFIGURATION_H_
 
-// #include <user_config.h>
+//#include <user_config.h>
 #include <SmingCore.h>
 
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
-        #define WIFI_SSID "myhotspot" // Put you SSID and Password here
-        #define WIFI_PWD "asdfgh1234"
+//#define WIFI_SSID "FRITZ!Box 7530 LV" // Put you SSID and Password here
+//#define WIFI_PWD "72032560351074684900"
+//#define WIFI_SSID "angelo-thinkpad-x1-carbon-4th" // Put you SSID and Password here
+//#define WIFI_PWD "qwerty123456"
+#define WIFI_SSID "iot" // Put you SSID and Password here
+#define WIFI_PWD "lamiapassword"
 #endif
 
+
 #define LAMP_CONFIG_FILE ".lamp.conf" // leading point for security reasons :)
+#define SWITCH_CONFIG_FILE ".switch.conf" // leading point for security reasons :)
+#define CRONOTEMP_CONFIG_FILE ".cronotemp.conf" // leading point for security reasons :)
+#define METER_CONFIG_FILE ".meter.conf" // leading point for security reasons :)
+#define DIMMER_CONFIG_FILE ".dimmer.conf"
 
 #define INT_PIN0 0   // GPIO0 d3
 #define INT_PIN2 2   // GPIO2 d4
@@ -27,20 +36,36 @@
 #define ALARM 2
 #define POWER 3
 #define BUZZER 4
-#define TEMPERATURE 5
-#define SWITCH 6
-#define PIR 7
-#define AMPERE 8
-#define xxx 9
-#define yyy 10
+#define SLEEP 5
+#define TEMPERATURE 6
+#define SWITCH 7
+#define PIR 8
+#define AMPERE 9
+#define TIME 10
 
 #define Lampada_radiocontrollata 1
 #define Pulsantiera_4_posti 2
-#define Rivelatore_temperatura 3
-#define Cronotermostato 4
+#define Cronotermostato 3
+#define Rivelatore_temperatura 4
+#define Rivelatore_movimento 5
+#define Rivelatore_luce 6
+#define Rivelatore_gas 7
+#define Rivelatore_pressione 8
+#define Rivelatore_acqua 9
+#define Termometro 10
+#define Amperometro 11
+#define Dimmer 12
+#define stazioneMeteo 13
 
 #define SEND_PRESENCE 9999
 #define CONFIGURATION 9998
+
+#define LCD 1
+// 0 BN
+// 1 COLOR
+
+#define LCD_C     LOW
+#define LCD_D     HIGH
 
 struct LampConfig
 {
@@ -48,37 +73,131 @@ struct LampConfig
 	{
             lamp=50;
             alarmtime="09:30";
-            powertime="23:30";
-            powerenabled=0;
+            sleeptime="23:30";
+            sleepenabled=0;
             alarmenabled=0;
             buzzerenabled=0;
+            powered=1;
+            NetworkSSID="";
+            NetworkPassword="";
 	}
 
 	String NetworkSSID;
 	String NetworkPassword;
  
-        String alarmtime, powertime;
-        int lamp, powerenabled,alarmenabled, buzzerenabled;
+        String alarmtime, sleeptime;
+        int lamp, sleepenabled,alarmenabled, buzzerenabled, powered;
         
 };
+
+
+struct CronoTempConfig
+{
+	CronoTempConfig()
+	{
+            stringtime1="05:30";
+            stringtime2="07:30";
+            stringtime3="12:30";
+            stringtime4="14:30";
+            stringtime5="17:30";
+            stringtime6="23:30";
+            stringtime7="23:30";
+
+            temperature=0;
+            noicetemp=4;
+            welltemp=18;
+            NetworkSSID="";
+            NetworkPassword="";
+	}
+
+	String NetworkSSID;
+	String NetworkPassword;
+        String stringtime1, stringtime2;
+        String stringtime3, stringtime4;
+        String stringtime5, stringtime6;
+        String stringtime7;
+ 
+        int temperature, noicetemp, welltemp;
+        
+};
+
+struct SwitchConfig
+{
+	SwitchConfig()
+	{
+            Led0=0;
+            Led2=0;
+            Led4=0;
+            Led5=0;
+            powered=0;
+            NetworkSSID="";
+            NetworkPassword="";
+	}
+
+	String NetworkSSID;
+	String NetworkPassword;
+ 
+        int Led0, Led2, Led4, Led5, powered;
+        
+};
+
+struct DimmerConfig
+{
+	DimmerConfig()
+	{
+            Value1=0;
+            Value2=0;
+            Value3=0;
+            Value4=0;
+            Value5=0;
+            powered=0;
+            NetworkSSID="";
+            NetworkPassword="";
+	}
+
+	String NetworkSSID;
+	String NetworkPassword;
+ 
+        int Value1, Value2, Value3, Value4, Value5, powered;
+        
+};
+
 
 struct LampMessage
 {
     LampMessage()
     {
-        elemento=0;
+        pulsante=0;
         evento=0;
         stato=0;
         valore=0;
     }
-    int evento, stato, valore, elemento;
+    int evento, stato, valore, pulsante;
 };
 
-void loadConfig();
-void saveConfig();
+extern void loadConfig();
+extern void saveConfig();
 extern void startWebClock();
 extern void flashleds();
 extern LampConfig ActiveConfig;
 extern void publishMessage(int evento, int linea, int tempo);
+extern void DisplayTime(uint8_t hour, uint8_t minutes, uint8_t seconds);
+extern void LcdInitialise(void);
+extern void LcdClear();
+extern void LcdWrite(uint8_t dc, uint8_t data);
+
+
+#define TFT_CLK 	14 /* D5 */
+#define TFT_MOSI 	13 /* D7 */
+#define TFT_MISO 	12 /* D7 */
+#define TFT_RST  	16 /* D0 */
+#define TFT_DC   	15 /* D8 */ // 15 8  
+#define TFT_CS   	4  /* D2 */ //  4 2
+
+#define PIN_BUTTON      5  /* D1 */ //  5 1
+#define PIN_PWM         2  /* D4 */ //  2 4
+#define PIN_DHT         2  /* D4 */ //  2 4
+#define PIN_BUZZER      0  /* D3 */ //  0 3
+#define PIN_RELAIS      0  /* D3 */ //  0 3
 
 #endif /* INCLUDE_CONFIGURATION_H_ */

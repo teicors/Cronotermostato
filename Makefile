@@ -3,6 +3,7 @@
 #####################################################################
 # Including user Makefile.
 # Should be used to set project-specific parameters
+SMING_HOME = /home/angelo/Software/Sming-3.8.1/Sming
 include ./Makefile-user.mk
 
 # Important parameters check.

@@ -1,13 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="97">
+<configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df root="." name="0">
+    <df root="/opt/sming/Components" name="0">
+      <df name="Adafruit_BME280_Library">
+        <in>Adafruit_BME280.cpp</in>
+        <in>Adafruit_BME280.h</in>
+      </df>
+      <df name="Adafruit_GFX_AS">
+        <in>Adafruit_GFX_AS.cpp</in>
+        <in>Adafruit_GFX_AS.h</in>
+        <in>Font16.c</in>
+        <in>Font16.h</in>
+        <in>Font32.c</in>
+        <in>Font32.h</in>
+        <in>Font64.c</in>
+        <in>Font64.h</in>
+        <in>Font7s.c</in>
+        <in>Font7s.h</in>
+        <in>Font7s_small.c</in>
+        <in>Font7s_small.h</in>
+        <in>Load_fonts.h</in>
+        <in>glcdfont.c</in>
+      </df>
+      <df name="Adafruit_ILI9341_AS">
+        <in>Adafruit_ILI9341_AS.cpp</in>
+        <in>Adafruit_ILI9341_AS.h</in>
+        <in>Adafruit_ILI9341_FAST.h</in>
+      </df>
+      <df name="Adafruit_ILI9341_NEW">
+        <in>Adafruit_ILI9341_NEW.cpp</in>
+        <in>Adafruit_ILI9341_NEW.h</in>
+        <in>hspi.c</in>
+        <in>hspi.h</in>
+        <in>spi_register.h</in>
+      </df>
+      <df name="Adafruit_Sensor">
+        <in>Adafruit_Sensor.h</in>
+      </df>
+      <df name="Adafruit_ST7735_AS">
+        <in>Adafruit_ST7735_AS.cpp</in>
+        <in>Adafruit_ST7735_AS.h</in>
+      </df>
+      <df name="CronLibrary">
+        <in>Command.cpp</in>
+        <in>Command.h</in>
+        <in>Cron.cpp</in>
+        <in>Cron.h</in>
+        <in>SwitchOffCommand.cpp</in>
+        <in>SwitchOffCommand.h</in>
+        <in>SwitchOnCommand.cpp</in>
+        <in>SwitchOnCommand.h</in>
+        <in>TimedCommand.cpp</in>
+        <in>TimedCommand.h</in>
+      </df>
+      <df name="Default">
+        <in>configuration.h</in>
+        <in>orologio.cpp</in>
+      </df>
+      <df name="MySQL_Connector_Arduino">
+        <in>MySQL_Connection.cpp</in>
+        <in>MySQL_Connection.h</in>
+        <in>MySQL_Cursor.cpp</in>
+        <in>MySQL_Cursor.h</in>
+        <in>MySQL_Encrypt_Sha1.cpp</in>
+        <in>MySQL_Encrypt_Sha1.h</in>
+        <in>MySQL_Packet.cpp</in>
+        <in>MySQL_Packet.h</in>
+      </df>
+      <df name="RGBWWLed">
+        <in>RGBWWAnimatedChannel.cpp</in>
+        <in>RGBWWAnimatedChannel.h</in>
+        <in>RGBWWLed.cpp</in>
+        <in>RGBWWLed.h</in>
+        <in>RGBWWLedAnimation.cpp</in>
+        <in>RGBWWLedAnimation.h</in>
+        <in>RGBWWLedAnimationQ.cpp</in>
+        <in>RGBWWLedAnimationQ.h</in>
+        <in>RGBWWLedColor.cpp</in>
+        <in>RGBWWLedColor.h</in>
+        <in>RGBWWLedOutput.cpp</in>
+        <in>RGBWWLedOutput.h</in>
+        <in>RGBWWTypes.h</in>
+        <in>RGBWWconst.h</in>
+      </df>
+    </df>
+    <df root="." name="1">
       <df name="app">
         <in>application.cpp</in>
         <in>configuration.cpp</in>
         <in>webserver.cpp</in>
       </df>
     </df>
+    <logicalFolder name="spiffs"
+                   displayName="spiffs"
+                   projectFiles="true"
+                   root="/opt/sming/Sming/Components/spiffs">
+      <logicalFolder name="spiffs" displayName="spiffs" projectFiles="true">
+        <logicalFolder name="src" displayName="src" projectFiles="true">
+          <itemPath>/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs.h</itemPath>
+          <itemPath>/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_cache.c</itemPath>
+          <itemPath>/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_check.c</itemPath>
+          <itemPath>/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_gc.c</itemPath>
+          <itemPath>/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_hydrogen.c</itemPath>
+          <itemPath>/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_nucleus.c</itemPath>
+          <itemPath>/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_nucleus.h</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="spiffy" displayName="spiffy" projectFiles="true">
+        <itemPath>/opt/sming/Sming/Components/spiffs/spiffy/spiffy.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
@@ -19,6 +121,7 @@
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
   <sourceRootList>
     <Elem>.</Elem>
+    <Elem>/opt/sming/Components</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -28,6 +131,10 @@
         <dependencyChecking>false</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
+      <flagsDictionary>
+        <element flagsID="0" commonFlags="-O2"/>
+        <element flagsID="1" commonFlags="-std=c++14"/>
+      </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
       <makefileType>
@@ -36,18 +143,394 @@
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath></executablePath>
+          <cTool>
+            <incDir>
+              <pElem>/opt/sming/Sming/Components/spiffs</pElem>
+              <pElem>/opt/sming/Sming/Components/spiffs/spiffs/src</pElem>
+            </incDir>
+          </cTool>
+          <ccTool>
+            <incDir>
+              <pElem>/opt/sming/Components</pElem>
+              <pElem>/opt/sming/Sming/Libraries</pElem>
+              <pElem>/opt/sming/Sming/Core</pElem>
+              <pElem>/opt/sming/Sming/Components</pElem>
+              <pElem>/opt/sming/Sming/Services</pElem>
+              <pElem>/opt/sming/Sming/SmingCore</pElem>
+            </incDir>
+          </ccTool>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
           <preBuildCommand></preBuildCommand>
         </preBuild>
       </makefileType>
-      <item path="app/application.cpp" ex="false" tool="1" flavor2="0">
+      <item path="/opt/sming/Components/Adafruit_BME280_Library/Adafruit_BME280.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
-      <item path="app/configuration.cpp" ex="false" tool="1" flavor2="0">
+      <item path="/opt/sming/Components/Adafruit_BME280_Library/Adafruit_BME280.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="app/webserver.cpp" ex="false" tool="1" flavor2="0">
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Adafruit_GFX_AS.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Adafruit_GFX_AS.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font16.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font16.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font32.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font32.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font64.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font64.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font7s.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font7s.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font7s_small.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Font7s_small.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/Load_fonts.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_GFX_AS/glcdfont.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_AS/Adafruit_ILI9341_AS.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_AS/Adafruit_ILI9341_AS.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_AS/Adafruit_ILI9341_FAST.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_NEW/Adafruit_ILI9341_NEW.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_NEW/Adafruit_ILI9341_NEW.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_NEW/hspi.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_NEW/hspi.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ILI9341_NEW/spi_register.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ST7735_AS/Adafruit_ST7735_AS.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_ST7735_AS/Adafruit_ST7735_AS.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Adafruit_Sensor/Adafruit_Sensor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/Command.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/Command.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/Cron.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/Cron.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/SwitchOffCommand.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/SwitchOffCommand.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/SwitchOnCommand.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/SwitchOnCommand.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/TimedCommand.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/CronLibrary/TimedCommand.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Default/configuration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/Default/orologio.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Connection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Connection.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Cursor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Cursor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Encrypt_Sha1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Encrypt_Sha1.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Packet.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/MySQL_Connector_Arduino/MySQL_Packet.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWAnimatedChannel.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWAnimatedChannel.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLed.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLed.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedAnimation.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedAnimation.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedAnimationQ.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedAnimationQ.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedColor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedColor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedOutput.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWLedOutput.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWTypes.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Components/RGBWWLed/RGBWWconst.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_cache.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+        <cTool flags="0">
+        </cTool>
+      </item>
+      <item path="/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_check.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+        <cTool flags="0">
+        </cTool>
+      </item>
+      <item path="/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_gc.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+        <cTool flags="0">
+        </cTool>
+      </item>
+      <item path="/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_hydrogen.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+        <cTool flags="0">
+        </cTool>
+      </item>
+      <item path="/opt/sming/Sming/Components/spiffs/spiffs/src/spiffs_nucleus.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+        <cTool flags="0">
+        </cTool>
+      </item>
+      <item path="/opt/sming/Sming/Components/spiffs/spiffy/spiffy.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+        <cTool flags="0">
+        </cTool>
+      </item>
+      <item path="app/application.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="app/configuration.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="app/webserver.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <folder path="spiffs/spiffs">
+        <cTool>
+          <incDir>
+            <pElem>/opt/sming/Sming/Components/spiffs/spiffy</pElem>
+          </incDir>
+        </cTool>
+      </folder>
     </conf>
   </confs>
 </configurationDescriptor>

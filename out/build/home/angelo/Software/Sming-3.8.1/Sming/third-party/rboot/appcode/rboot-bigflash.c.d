@@ -1,0 +1,27 @@
+/home/angelo/Software/Sming-3.8.1/Sming//third-party/rboot/appcode/rboot-bigflash.o: \
+ /home/angelo/Software/Sming-3.8.1/Sming//third-party/rboot/appcode/rboot-bigflash.c \
+ /home/angelo/Software/Sming-3.8.1/Sming//system/include/rboot-integration.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//system/include/esp_systemapi.h \
+ /opt/esp-open-sdk/sdk/include/ets_sys.h \
+ /opt/esp-open-sdk/sdk/include/c_types.h \
+ /opt/esp-open-sdk/sdk/include/eagle_soc.h \
+ /opt/esp-open-sdk/sdk/include/osapi.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//include/user_config.h \
+ /opt/esp-open-sdk/sdk/include/gpio.h \
+ /opt/esp-open-sdk/sdk/include/os_type.h \
+ /opt/esp-open-sdk/sdk/include/ets_sys.h \
+ /opt/esp-open-sdk/sdk/include/user_interface.h \
+ /opt/esp-open-sdk/sdk/include/os_type.h \
+ /opt/esp-open-sdk/sdk/include/ip_addr.h \
+ /opt/esp-open-sdk/sdk/include/queue.h \
+ /opt/esp-open-sdk/sdk/include/spi_flash.h \
+ /opt/esp-open-sdk/sdk/include/spi_flash.h \
+ /opt/esp-open-sdk/sdk/include/espconn.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//system/include/espinc/spi_register.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//system/include/m_printf.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//system/include/debug_progmem.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//Wiring/FakePgmSpace.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//system/include/m_printf.h \
+ /opt/esp-open-sdk/sdk/include/c_types.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//system/include/stringutil.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//third-party/rboot/rboot.h
