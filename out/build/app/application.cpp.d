@@ -258,21 +258,16 @@ app/application.o: app/application.cpp \
  /home/angelo/Software/Sming-3.8.1/Sming//include/../Wiring/WVector.h \
  /home/angelo/Software/Sming-3.8.1/Sming//include/../Wiring/WString.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Libraries/ArduinoJson/ArduinoJson.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Default/configuration.h \
- include/special_chars.h include/webserver.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/CronLibrary/TimedCommand.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/CronLibrary/Command.h \
+ include/configuration.h include/special_chars.h include/webserver.h \
+ include/NtpClientDemo.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Timezone/include/Timezone.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//Libraries/SolarCalculator/include/SolarCalculator.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//Libraries/OneWire/OneWire.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Wiring/Arduino.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../Wiring/WiringFrameworkDependencies.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../SmingCore/SmingCore.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../SmingCore/ArduinoCompat.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../SmingCore/SmingCore.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/CronLibrary/Cron.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/CronLibrary/TimedCommand.h \
- include/NtpClientDemo.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Timezone/include/Timezone.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/SolarCalculator/include/SolarCalculator.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/OneWire/OneWire.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Libraries/DS18S20/ds18s20.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Libraries/DS18S20/../../SmingCore/Wire.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Adafruit_ILI9341_NEW/Adafruit_ILI9341_NEW.h \
@@ -281,5 +276,6 @@ app/application.o: app/application.cpp \
  /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Adafruit_ILI9341_NEW/hspi.h \
  /home/angelo/Software/Sming-3.8.1/Sming//system/include/espinc/spi_register.h \
  /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Adafruit_GFX_Library_master/Adafruit_GFX.h \
+ /home/angelo/Software/Sming-3.8.1/Sming//Libraries/XPT2046/XPT2046.h \
  include/BPMDraw.h include/FreeSansBold9pt7b.h \
  include/DSEG7ClassicRegular18pt7b.h

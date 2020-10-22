@@ -258,12 +258,5 @@ app/webserver.o: app/webserver.cpp \
  /home/angelo/Software/Sming-3.8.1/Sming//include/../Wiring/WVector.h \
  /home/angelo/Software/Sming-3.8.1/Sming//include/../Wiring/WString.h \
  /home/angelo/Software/Sming-3.8.1/Sming//SmingCore/Data/Stream/JsonObjectStream.h \
- include/configuration.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/CronLibrary/Cron.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Wiring/Arduino.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../Wiring/WiringFrameworkDependencies.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../SmingCore/SmingCore.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../SmingCore/ArduinoCompat.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Wiring/../SmingCore/SmingCore.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/CronLibrary/TimedCommand.h \
- /home/angelo/Software/Sming-3.8.1/Sming//Libraries/CronLibrary/Command.h
+ /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Default/configuration.h \
+ include/configuration.h

@@ -107,64 +107,6 @@
         }
         
 
-        $(function() { 
-          var handle = $( "#custom-handle-ti" );
-          $( "#slider-ti" ).slider({
-            value: {sleeptime}, 
-            min: 0,
-            max: 1439,
-            create: function() {
-              ore=parseInt($( this ).slider( "value" )/60);
-              minuti=$( this ).slider( "value" )-ore*60;
-              $( "#bbb" ).val( ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2) );              
-              handle.text( "" );
-            },
-            slide: function( event, ui ) {
-              ore=parseInt($( this ).slider( "value" )/60);
-              minuti=($( this ).slider( "value" )-ore*60);
-              $( "#bbb" ).val( ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2) );              
-              handle.text( "" );
-            },
-            stop: function( event, ui ) {
-              ore=parseInt($( this ).slider( "value" )/60);
-              minuti=($( this ).slider( "value" )-ore*60);
-              $( "#bbb" ).val( ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2) );              
-              $.post( "/api/off", { time: ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2), state: "1" } );        
-              handle.text( "" );
-            }
-          });
-          
-        } );
-
-        
-        $(function() { 
-          var handle = $( "#custom-handle-al" );
-          $( "#slider-al" ).slider({
-            value: {alarmtime}, 
-            min: 0,
-            max: 1439,
-            create: function() {
-              ore=parseInt($( this ).slider( "value" )/60);
-              minuti=$( this ).slider( "value" )-ore*60;
-              $( "#ccc" ).val( ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2) );              
-              handle.text( "" );
-            },
-            slide: function( event, ui ) {
-              ore=parseInt($( this ).slider( "value" )/60);
-              minuti=($( this ).slider( "value" )-ore*60);
-              $( "#ccc" ).val( ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2) );              
-              handle.text( "" );
-            },
-            stop: function( event, ui ) {
-              ore=parseInt($( this ).slider( "value" )/60);
-              minuti=($( this ).slider( "value" )-ore*60);
-              $( "#ccc" ).val( ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2) );              
-              $.post( "/api/alarm", { time: ('0'+ore).slice(-2)+":"+('0'+minuti).slice(-2), state: "1" } );        
-              handle.text( "" );
-            }
-          });
-        } );
-
         
         </script>
         
@@ -202,6 +144,15 @@
               $('#test1').scheduler({
                 accuracy: 2,
                 locale: 'it',
+                data : {
+                    {stringtime1}
+                    {stringtime2}
+                    {stringtime3}
+                    {stringtime4}
+                    {stringtime5}
+                    {stringtime6}
+                    {stringtime7}
+                },
                 onSelect: function (d) {
                   $.post( "/api/time",  { time: JSON.stringify($('#test1').scheduler('val')) }  );
                 }
@@ -215,47 +166,7 @@
 	  <div class="row">
 		<h2>&nbsp;</h2>
 		<div class="col-xs-offset-2 col-xs-8">
-			<!-- Misc settings config -->
-                        
-                            <div class="panel-heading">
-                              <table style="width:300px">
-                              <tr>
-                                  <th>
-                                <h3 class="panel-title">Time Power Off</h3>
-                                  </th>
-                                  <th>
-                                <input type="text" id="bbb" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                                  </th>
-                              </tr>
-                              </table>
-                            </div>
-
-                            <div class="panel-body">
-                                <div id="slider-ti">
-                                  <div id="custom-handle-ti" class="ui-slider-handle"></div> 
-                                </div>
-                            </div>
-                        
-
-                            <div class="panel-heading">
-                              <table style="width:280px">
-                              <tr>
-                                  <th>
-                                  <h3 class="panel-title">Time Alarm</h3>
-                                  </th>
-                                  <th>
-                                  <input type="text" id="ccc" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                                  </th>
-                              </tr>
-                              </table>
-                            </div>
-
-                            <div class="panel-body">
-                                <div id="slider-al">
-                                  <div id="custom-handle-al" class="ui-slider-handle"></div> 
-                                </div>
-                            </div>
-                        
+			<!-- Misc settings config -->                       
                         
 			<div>
 			  <div class="panel panel-default">

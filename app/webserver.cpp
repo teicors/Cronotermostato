@@ -1,9 +1,9 @@
-// #include <user_config.h>
 #include <SmingCore.h>
-//#include <JsonObjectStream5.h>A
 #include <SmingCore/Data/Stream/JsonObjectStream.h>
+#include <Libraries/Default/configuration.h>
 #include "configuration.h"
-#include <CronLibrary/Cron.h>
+
+typedef unsigned char BYTE;
 
 HttpServer server;
 
@@ -12,11 +12,27 @@ extern String alarmtime, sleeptime;
 extern int sleepenabled,alarmenabled, buzzerenabled;
 //extern void setpwn(int led0);
 extern void sendData();
-extern Cron cron;
-extern CronoTempConfig CronoTempCfg;
-extern LampMessage LampMsg;
+//extern Cron cron;
+
 extern float temperature;
 extern float humidity ;
+extern boolean StatoRelais;
+
+
+struct CronoTempMessage
+{
+    CronoTempMessage()
+    {
+        unixtime=0;
+        evento=0;
+        stato=0;
+    }
+    int evento, stato, unixtime;
+};
+
+extern CronoTempMessage CronoTempMsg;
+extern CronoTempConfig CronoTempCfg;
+
 
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
@@ -24,6 +40,32 @@ extern float humidity ;
 	#define WIFI_PWD "PleaseEnterPass"
 #endif
 
+String ConvertStream (String TmpStr, BYTE DayConv) {
+    String s;
+    bool dafinire=false;
+    for (BYTE i=0;i<TmpStr.length();i++){
+       if ((BYTE)TmpStr[i]==(BYTE)'1') {
+           char dest[3];
+           itoa(i,dest,10);
+           if (dafinire) { s += ','; }
+           s +=dest;
+           dafinire=true;
+       }   
+    }
+    if (dafinire) {
+        char dest[1];
+        itoa(DayConv,dest,10);
+        s ='['+s;
+        s +=']';
+        s =' '+s;
+        s =':'+s;
+        s =dest+s;
+        if (DayConv!=7) {
+            s+=',';
+        }
+    }
+    return s;
+}
 
 void onIndex(HttpRequest &request, HttpResponse &response)
 {
@@ -32,15 +74,10 @@ void onIndex(HttpRequest &request, HttpResponse &response)
     vars["temperature"] = CronoTempCfg.temperature;
     vars["noicetemp"] = CronoTempCfg.noicetemp;
     vars["welltemp"] = CronoTempCfg.welltemp;
-    vars["stringtime1"] = CronoTempCfg.stringtime1;
-    vars["stringtime2"] = CronoTempCfg.stringtime2;
-    vars["stringtime3"] = CronoTempCfg.stringtime3;
-    vars["stringtime4"] = CronoTempCfg.stringtime4;
-    vars["stringtime5"] = CronoTempCfg.stringtime5;
-    vars["stringtime6"] = CronoTempCfg.stringtime6;
-    vars["stringtime5"] = CronoTempCfg.stringtime7;
+
     vars["temp"] = temperature;
     vars["date"] = SystemClock.now();
+    vars["stato"] = StatoRelais;
     debugf("Send Home Page");
     response.sendTemplate(tmpl);
 }
@@ -69,6 +106,13 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
     TemplateFileStream *tmpl = new TemplateFileStream("config.html");
     auto &vars = tmpl->variables();
     vars["SSID"] = CronoTempCfg.NetworkSSID;
+    vars["stringtime1"] = ConvertStream(CronoTempCfg.stringtime[1],1);
+    vars["stringtime2"] = ConvertStream(CronoTempCfg.stringtime[2],2);
+    vars["stringtime3"] = ConvertStream(CronoTempCfg.stringtime[3],3);
+    vars["stringtime4"] = ConvertStream(CronoTempCfg.stringtime[4],4);
+    vars["stringtime5"] = ConvertStream(CronoTempCfg.stringtime[5],5);
+    vars["stringtime6"] = ConvertStream(CronoTempCfg.stringtime[6],6);
+    vars["stringtime7"] = ConvertStream(CronoTempCfg.stringtime[7],7);
     response.sendTemplate(tmpl);
 }
 /*
@@ -108,7 +152,7 @@ void onFile(HttpRequest& request, HttpResponse& response)
 //      result.substr(0, valore[i]-1) + "1" + result.substr(valore[i]+1);
 //      int indice=valore[i];
 //      result[indice]="1";
- //     result.replace(valore[i], 1, "1");
+//      result.replace(valore[i], 1, "1");
 //    }  
 //  return result*;
 //}
@@ -177,49 +221,49 @@ void onApiTime(HttpRequest &request, HttpResponse &response)
         s=s.substring(0,(int)a1[i])+"1"+s.substring((int)a1[i]+1);
         Serial.printf("Ciclo S1 %s\n",s.c_str());
     }
-    CronoTempCfg.stringtime1=s;
+    CronoTempCfg.stringtime[1]=s;
     
         s="000000000000000000000000000000000000000000000000";
     for (int i=0; i< a2.size(); i++) {
         s=s.substring(0,(int)a2[i])+"1"+s.substring((int)a2[i]+1);
         Serial.printf("Ciclo S2 %s\n",s.c_str());
     }
-    CronoTempCfg.stringtime2=s;
+    CronoTempCfg.stringtime[2]=s;
     
         s="000000000000000000000000000000000000000000000000";
     for (int i=0; i< a3.size(); i++) {
         s=s.substring(0,(int)a3[i])+"1"+s.substring((int)a3[i]+1);
         Serial.printf("Ciclo S3 %s\n",s.c_str());
     }
-    CronoTempCfg.stringtime3=s;
+    CronoTempCfg.stringtime[3]=s;
     
         s="000000000000000000000000000000000000000000000000";
     for (int i=0; i< a4.size(); i++) {
         s=s.substring(0,(int)a4[i])+"1"+s.substring((int)a4[i]+1);
         Serial.printf("Ciclo S4 %s\n",s.c_str());
     }
-    CronoTempCfg.stringtime4=s;
+    CronoTempCfg.stringtime[4]=s;
     
         s="000000000000000000000000000000000000000000000000";
     for (int i=0; i< a5.size(); i++) {
         s=s.substring(0,(int)a5[i])+"1"+s.substring((int)a5[i]+1);
         Serial.printf("Ciclo S5 %s\n",s.c_str());
     }
-    CronoTempCfg.stringtime5=s;
+    CronoTempCfg.stringtime[5]=s;
     
         s="000000000000000000000000000000000000000000000000";
     for (int i=0; i< a6.size(); i++) {
         s=s.substring(0,(int)a6[i])+"1"+s.substring((int)a6[i]+1);
         Serial.printf("Ciclo S6 %s\n",s.c_str());
     }
-    CronoTempCfg.stringtime6=s;
+    CronoTempCfg.stringtime[6]=s;
     
         s="000000000000000000000000000000000000000000000000";
     for (int i=0; i< a7.size(); i++) {
         s=s.substring(0,(int)a7[i])+"1"+s.substring((int)a7[i]+1);
         Serial.printf("Ciclo S7 %s\n",s.c_str());
     }
-    CronoTempCfg.stringtime7=s;
+    CronoTempCfg.stringtime[7]=s;
     
     Serial.printf("s1 %s\n",s1.c_str());
     
@@ -244,20 +288,18 @@ void onApiTime(HttpRequest &request, HttpResponse &response)
     
     int what=request.getPostParameter("state").toInt();
     switch (what) {
-        case 1: CronoTempCfg.stringtime1=s1; break;
-        case 2: CronoTempCfg.stringtime2=s2; break;
-        case 3: CronoTempCfg.stringtime3=s3; break;
-        case 4: CronoTempCfg.stringtime4=s4; break;
-        case 5: CronoTempCfg.stringtime5=s5; break;
-        case 6: CronoTempCfg.stringtime6=s6; break;
-        case 7: CronoTempCfg.stringtime7=s7; break;
+        case 1: CronoTempCfg.stringtime[1]=s1; break;
+        case 2: CronoTempCfg.stringtime[2]=s2; break;
+        case 3: CronoTempCfg.stringtime[3]=s3; break;
+        case 4: CronoTempCfg.stringtime[4]=s4; break;
+        case 5: CronoTempCfg.stringtime[5]=s5; break;
+        case 6: CronoTempCfg.stringtime[6]=s6; break;
+        case 7: CronoTempCfg.stringtime[7]=s7; break;
     }
 //    LampCfg.buzzerenabled = request.getPostParameter("state").toInt();
-    LampMsg.evento = TIME;
-    LampMsg.pulsante = what;
-    LampMsg.stato = 1;
-    LampMsg.valore = 60*timefromweb.substring(0,2).toInt()+timefromweb.substring(3,5).toInt();   
-    cron.UpdateCommand(what,1,"00."+timefromweb.substring(3,5)+"."+timefromweb.substring(0,2)+".*.*.*");
+    CronoTempMsg.evento = TIME;
+    CronoTempMsg.stato = 60*timefromweb.substring(0,2).toInt()+timefromweb.substring(3,5).toInt();   
+//    cron.UpdateCommand(what,1,"00."+timefromweb.substring(3,5)+"."+timefromweb.substring(0,2)+".*.*.*");
     saveConfig();
     sendData();
 //    debugf("Update onApiBuzzer");
@@ -281,13 +323,13 @@ void onApiStatus(HttpRequest &request, HttpResponse &response)
     sensors["temp"] = CronoTempCfg.temperature;
     sensors["noicetemp"] = CronoTempCfg.noicetemp;
     sensors["welltemp"] = CronoTempCfg.welltemp;
-    sensors["stringtime1"] = CronoTempCfg.stringtime1;
-    sensors["stringtime2"] = CronoTempCfg.stringtime2;
-    sensors["stringtime3"] = CronoTempCfg.stringtime3;
-    sensors["stringtime4"] = CronoTempCfg.stringtime4;
-    sensors["stringtime5"] = CronoTempCfg.stringtime5;
-    sensors["stringtime6"] = CronoTempCfg.stringtime6;
-    sensors["stringtime5"] = CronoTempCfg.stringtime7;
+    sensors["stringtime1"] = CronoTempCfg.stringtime[1];
+    sensors["stringtime2"] = CronoTempCfg.stringtime[2];
+    sensors["stringtime3"] = CronoTempCfg.stringtime[3];
+    sensors["stringtime4"] = CronoTempCfg.stringtime[4];
+    sensors["stringtime5"] = CronoTempCfg.stringtime[5];
+    sensors["stringtime6"] = CronoTempCfg.stringtime[6];
+    sensors["stringtime5"] = CronoTempCfg.stringtime[7];
 //    response.sendJsonObject(stream);
     response.sendDataStream(stream, MIME_JSON);
 }
@@ -302,11 +344,20 @@ void OnApiShowInfo(HttpRequest &request, HttpResponse &response) {
 }
 
 
+void OnAjaxState(HttpRequest& request, HttpResponse& response) {
+    JsonObjectStream* stream = new JsonObjectStream();
+    JsonObject& json = stream->getRoot();
+    json["Date"]=SystemClock.now(eTZ_UTC);;
+    json["Temp"] = temperature;
+    json["StatoRelais"] = StatoRelais;
+    response.sendDataStream(stream, MIME_JSON);
+}
+
 void OnAjaxDate(HttpRequest& request, HttpResponse& response) {
     JsonObjectStream* stream = new JsonObjectStream();
     JsonObject& json = stream->getRoot();
     json["status"] = (bool)true;
-    json["value"] = SystemClock.now();
+    json["value"] = SystemClock.now(eTZ_UTC);
     response.sendDataStream(stream, MIME_JSON);
 }
 
@@ -323,6 +374,18 @@ void onReboot(HttpRequest &request, HttpResponse &response)
     System.restart();
 }
 
+void onPowerOn(HttpRequest &request, HttpResponse &response)
+{
+        digitalWrite(PIN_RELAIS,HIGH);
+        Serial.println(" Pin HIGH");
+}
+
+void onPowerOff(HttpRequest &request, HttpResponse &response)
+{
+        digitalWrite(PIN_RELAIS,LOW);
+        Serial.println(" Pin LOW");
+}
+
 
 void startWebServer()
 {
@@ -333,11 +396,13 @@ void startWebServer()
     server.paths.set("/api", onApiDoc);
     server.paths.set("/api/status", onApiStatus);
     server.paths.set("/api/time", onApiTime);
+    server.paths.set("/api/state", OnAjaxState);
     server.paths.set("/api/info", OnApiShowInfo);    
     server.paths.set("/api/date", OnAjaxDate);    
     server.paths.set("/api/temp", OnAjaxTemp);    
     server.paths.set("/config", onConfiguration);
-    server.paths.set("/reboot", onReboot);
+    server.paths.set("/api/on", onPowerOn);
+    server.paths.set("/api/off", onPowerOff);
     server.paths.setDefault(onFile);
 //    server.setDefaultHandler(onFile);
     serverStarted = true;

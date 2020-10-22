@@ -4,14 +4,14 @@
 
 ///////////////////////////////////////////////////////////////////
 // Set your SSID & Pass for initial configuration
-#include <Libraries/Default/configuration.h> // application configuration
+#include "configuration.h" // application configuration
 ///////////////////////////////////////////////////////////////////
 // wget "http://192.168.1.220/api/output?status=1&led=2" -o pippo
 ///////////////////////////////////////////////////////////////////
 #include "special_chars.h"
 #include "webserver.h"
-#include <Libraries/CronLibrary/TimedCommand.h>
-#include <Libraries/CronLibrary/Cron.h>
+//#include <Libraries/CronLibrary/TimedCommand.h>
+//#include <Libraries/CronLibrary/Cron.h>
 #include "NtpClientDemo.h"
 #include <Libraries/Timezone/include/Timezone.h>
 #include <Libraries/SolarCalculator/include/SolarCalculator.h>
@@ -20,14 +20,22 @@
 #include <Libraries/Adafruit_ILI9341_NEW/Adafruit_ILI9341_NEW.h>
 #include <c_types.h>
 #include <Libraries/Adafruit_GFX_Library_master/Adafruit_GFX.h>
-#include <Libraries/OneWire/OneWire.h>
-#include <Libraries/DS18S20/ds18s20.h>
+#include <Libraries/XPT2046/XPT2046.h>
 #include "BPMDraw.h"
 #include "FreeSansBold9pt7b.h"
 #include "DSEG7ClassicRegular18pt7b.h"
 
+/*
+Pinout:
+MISO GPIO12 D6
+MOSI GPIO13 D7
+CLK GPIO14  D5
+CS GPIO15
+DC GPIO5
+RST GPIO4
+*/
 
-
+XPT2046 touch(/*cs=*/ D0, /*irq=*/ D3);
 
 // # include <Libraries/Adafruit_ST7735/Adafruit_ST7735.h>
 // # include <Libraries/Adafruit_GFX/Adafruit_GFX.h>
@@ -43,8 +51,7 @@
 // in this demo, the same ports for HW and SW SPI are used
 Adafruit_ILI9341_NEW tft; // = Adafruit_ILI9341_NEW(TFT_CS, TFT_DC, TFT_RST);
 
-
-//#define LCD 1
+#define LCD 1
 // 0 BN
 // 1 COLOR
 #define TYPEOFBOARD 00
@@ -61,16 +68,20 @@ NtpClientDemo* demo;
 #define JSON_PORT 8111
 
 Timer Timer0;
-Timer flashled;
 Timer CronTimer;
 Timer TempTimer;
 
+boolean commasec;
 int inter0;
 int verso;
 int data_to_send;
 int32_t read0, last0, led0;
 String StrTime;
 DateTime ShowMyTime;
+int32_t ColoreOrario;
+boolean OldStatoRelais=false; 
+boolean StatoRelais=false;
+uint16_t x, y, xold, yold;
 
 float humidity = 0;
 float temperature = 0;
@@ -79,7 +90,8 @@ float Old_temp=0;
 uint32_t startTime;
 
 CronoTempConfig CronoTempCfg;
-LampMessage LampMsg;
+CronoTempMessage CronoTempMsg;
+
 
 DS18S20 ReadTemp;
 FtpServer ftp;
@@ -110,7 +122,6 @@ void DisplayDateClock(uint8_t day, uint8_t month, uint16_t year);
     uint8_t Old_Month =  13; // Jan is month 0
     uint16_t Old_Year = 100;  // Full Year numer
 
-
 //Central European Time (Frankfurt, Paris)
 TimeChangeRule *tcr;        //pointer to the time change rule, use to get the TZ abbrev
 TimeChangeRule CEST = {"CEST", Last, Sun, Mar, 2, 120};     //Central European Summer Time
@@ -125,19 +136,17 @@ Timezone CE(CEST, CET);
 //
 
 // Abilitato, CrontSring, Cosa, PIN
-TimedCommand command01("0","01.*.*.*.*.*","ON","13");
-TimedCommand command02("0","31.*.*.*.*.*","OFF","13");
+//TimedCommand command01("0","00.*.*.*.*.*","ONN","13");
 
 // create an array of timed commands
-TimedCommand *tCommands[] = {
-    &command01,
-    &command02
-}
-;
+//TimedCommand *tCommands[] = {
+//    &command01,
+//}
+//;
         
 // create a cron object and pass it the array of timed commands
 // and the count of timed commands
-Cron cron(tCommands,2);
+//Cron cron(tCommands,1);
 
 
 // Forward declarations
@@ -168,10 +177,8 @@ void JsonOnReadyToSend(TcpClient& client, TcpConnectionEvent sourceEvent)
         JsonObject& MsgToSend = jsonBuffer.createObject();
 
         MsgToSend["basetta"] = WifiStation.getIP().toString();
-        MsgToSend["pulsante"] = LampMsg.pulsante;
-        MsgToSend["evento"]  = LampMsg.evento;
-        MsgToSend["stato"]   = LampMsg.stato;
-        MsgToSend["valore"]  = LampMsg.valore;
+        MsgToSend["evento"]  = CronoTempMsg.evento;
+        MsgToSend["stato"]   = CronoTempMsg.stato;
 
         client.sendString("POST /json HTTP/1.1\r\n");
         client.sendString("Accept: */*\r\n");
@@ -341,22 +348,6 @@ void startFTP()
 }
 
 
-void flashaled()
-{
-        digitalWrite(led0,HIGH);
-        delay(50);
-        digitalWrite(led0,LOW);
-        delay(50);
-        digitalWrite(led0,HIGH);
-        delay(50);    
-        digitalWrite(led0,LOW);
-        delay(50);
-        digitalWrite(led0,HIGH);
-        delay(50);    
-        digitalWrite(led0,LOW);
-        delay(50);
-}
-
 void draw_clock(void) {
     uint8_t Hour;
     uint8_t Minute;
@@ -367,7 +358,6 @@ void draw_clock(void) {
     uint8_t Month; // Jan is month 0
     uint16_t Year;  // Full Year numer
     ShowMyTime.fromUnixTime(SystemClock.now(),&Second,&Minute,&Hour,&Day,&DayofWeek,&Month,&Year);
-    
 #if LCD == 0
 //    debugf("DrawClock");
     DisplayTimeClock(Hour, Minute, Second);
@@ -376,35 +366,35 @@ void draw_clock(void) {
 //    tft.fillScreen(ST7735_BLACK);
     tft.setFont(&DSEG7ClassicRegular18pt7b);
     tft.setTextSize(1);
-    if (Old_Hour!=Hour) {
+    if ((Old_Hour!=Hour) || (OldStatoRelais!=StatoRelais)) {
     tft.setTextColor(ILI9341_BLACK);    
     tft.setCursor(10,40);
         if (Old_Hour<10) {
             tft.print("0");
         }
         tft.print(Old_Hour);
-        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextColor(ColoreOrario); // ILI9341_WHITE
         tft.setCursor(10,40);
         if (Hour<10) {
             tft.print("0");
         }
         tft.print(Hour);        
     }
-    if (Old_Minute!=Minute) {
+    if ((Old_Minute!=Minute) || (OldStatoRelais!=StatoRelais)) {
     tft.setTextColor(ILI9341_BLACK);    
     tft.setCursor(80,40);
         if (Old_Minute<10) {
             tft.print("0");
         }
         tft.print(Old_Minute);
-        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextColor(ColoreOrario); // ILI9341_WHITE
         tft.setCursor(80,40);
         if (Minute<10) {
             tft.print("0");
         }
         tft.print(Minute);        
     }
-    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextColor(ColoreOrario); // ILI9341_WHITE
 /* Rimuovo i secondi   
     if (Old_Second!=Second) {
     tft.setTextColor(ILI9341_BLACK);    
@@ -438,7 +428,15 @@ void draw_clock(void) {
     tft.print(Old_Second);
 */
     tft.setCursor(70,40);
-    tft.print(":");
+    if (commasec) {
+      tft.setTextColor(ColoreOrario); 
+      tft.print(":");
+    }
+    else {
+      tft.setTextColor(ILI9341_BLACK); 
+      tft.print(":");
+    }
+    commasec=!commasec;
 /*
     tft.setCursor(80,40);
     if (Minute<10) {
@@ -458,10 +456,10 @@ void draw_clock(void) {
     tft.print(Second);
 */    
     tft.setFont(&FreeSansBold9pt7b);
-    tft.setCursor(10,60);
+    tft.setCursor(10,160);
     tft.setTextSize(2);
     if (Old_DayofWeek!=DayofWeek) {
-        tft.setCursor(10,70);    
+        tft.setCursor(10,190);    
         tft.setTextColor(ILI9341_BLACK);
         tft.print("Lunedi ");
         tft.print(Old_DayofWeek);
@@ -491,6 +489,7 @@ void draw_clock(void) {
     Old_Day=Day;
     Old_Month=Month;
     Old_Year=Year;
+        
 }
 
 
@@ -498,9 +497,61 @@ void draw_clock(void) {
 void CronLoop()
 {
 //    debugf("CronLoop");
-    cron.loop();
+    uint8_t Hour;
+    uint8_t Minute;
+    uint8_t Second;
+//    uint16_t Milliseconds;
+    uint8_t Day;
+    uint8_t DayofWeek; // Sunday is day 0
+    uint8_t Month; // Jan is month 0
+    uint16_t Year;  // Full Year numer
+    ShowMyTime.fromUnixTime(SystemClock.now(),&Second,&Minute,&Hour,&Day,&DayofWeek,&Month,&Year);
+    int i=0;
+    if (Minute>30) { i=1 ;}
+    int HalfNumHour=Hour*2+i;
+    i=0;
+    if (Minute>15) { i=1 ;}
+    if (Minute>30) { i=2 ;}
+    if (Minute>45) { i=3 ;}
+    int QuarterNumHour=Hour*4+i;
+    if (CronoTempCfg.stringtime[DayofWeek+1].substring(HalfNumHour,HalfNumHour+1)=="0") {
+        digitalWrite(PIN_RELAIS,LOW);
+        ColoreOrario = ILI9341_GREEN;
+        StatoRelais = false;
+    }
+    else {
+        digitalWrite(PIN_RELAIS,HIGH);
+        ColoreOrario = ILI9341_RED;
+        StatoRelais = true;
+    }     
     draw_clock();
+    OldStatoRelais=StatoRelais;
+    if (touch.isTouching()) {
+//      uint16_t x, y;
+      touch.getPosition(x, y);
+      if ((x!=65535) and (y!=65535)) {          
+        tft.setCursor(10,200);
+        tft.setTextColor(ILI9341_BLACK);
+        tft.print(xold);
+        tft.setCursor(100,200);
+        tft.setTextColor(ILI9341_BLACK);
+        tft.print(yold);
+        tft.setCursor(10,200);
+        tft.setTextColor(ILI9341_PURPLE);
+        tft.print(x);
+        tft.setCursor(100,200);
+        tft.setTextColor(ILI9341_YELLOW);
+        tft.print(y);
+//        tft.print(DayofWeek);  
+        Serial.println(x);
+        Serial.println(y);
+        xold=x;
+        yold=y;
+      }
+    }
+
 }
+
 
 void TempLoop()
 {
@@ -568,25 +619,62 @@ void TempLoop()
                      tft.setTextColor(ILI9341_RED);
                      break;
             }
+            if ((uint)temp0<16) {tft.setTextColor(ILI9341_DARKCYAN);}
+            if ((uint)temp0>22) {tft.setTextColor(ILI9341_RED);}
             tft.print(temp0);        
-        }
         Old_temp=temp0;
+        }
     } else
             Serial.println("No valid Measure so far! wait please");
 }
     
-void SendPresence()
+
+void drawButtons()
 {
-//    publishMessage(WifiStation.getIP().toString().c_str(),9999,-1);
-    LampMsg.evento=SEND_PRESENCE;
-    LampMsg.stato=Lampada_radiocontrollata;
-    sendData();
+// Draw the upper row of buttons
+  for (x=0; x<5; x++)
+  {
+//    tft.setColor(0, 0, 255);
+    tft.fillRoundRect (10+(x*60), 10, 60+(x*60), 60,10,255);
+//    tft.setColor(255, 255, 255);
+    tft.drawRoundRect (10+(x*60), 10, 60+(x*60), 60,10,255*255);
+//    tft.printNumI(x+1, 27+(x*60), 27);
+  }
+// Draw the center row of buttons
+  for (x=0; x<5; x++)
+  {
+//    tft.setColor(0, 0, 255);
+    tft.fillRoundRect (10+(x*60), 70, 60+(x*60), 120,10, 255);
+//    tft.setColor(255, 255, 255);
+    tft.drawRoundRect (10+(x*60), 70, 60+(x*60), 120,10,255*255);
+//    if (x<4)
+//      myGLCD.printNumI(x+6, 27+(x*60), 87);
+  }
+//  tft.print("0", 267, 87);
+// Draw the lower row of buttons
+//  tft.setColor(0, 0, 255);
+  tft.fillRoundRect (10, 130, 150, 180,10,tft.Color565(0, 0, 255));
+//  tft.setColor(255, 255, 255);
+  tft.drawRoundRect (10, 130, 150, 180, 10, tft.Color565(255, 255, 255));
+  tft.setCursor(40, 147);
+  tft.print("Clear");
+//  tft.setColor(0, 0, 255);
+  tft.fillRoundRect (160, 130, 300, 180, 10, tft.Color565(0, 0, 255));
+//  tft.setColor(255, 255, 255);
+  tft.drawRoundRect (160, 130, 300, 180, 10, tft.Color565(255, 255, 255));
+  tft.setCursor(190, 147);
+  tft.print("Enter" );
+//  tft.setBackColor (0, 0, 0);
 }
 
-// CallBack example 1 
-// ntpClientDemo dm1 = ntpClientDemo();
-// or use 
-// ntpClientDemo dm1;
+
+
+void SendPresence()
+{
+    CronoTempMsg.evento=SEND_PRESENCE;
+    CronoTempMsg.stato=Cronotermostato;
+    sendData();
+}
 
 void onPrintSystemTime() {
     Serial.print("Local Time    : ");
@@ -602,7 +690,7 @@ void onPrintSystemTime() {
 void onNtpReceive(NtpClient& client, time_t timestamp) {
     SystemClock.setTime(timestamp);
 
-    debugf("Time synchronized: ");
+    Serial.println("Time synchronized: ");
     Serial.println(SystemClock.getSystemTimeString());
     draw_clock();
 }
@@ -630,8 +718,7 @@ void gotIP(IPAddress ip, IPAddress netmask, IPAddress gateway)
     startWebServer();
     startFTP();
     tft.fillScreen(ILI9341_BLACK);
-    flashled.initializeMs(500, flashaled).stop();
-    CronTimer.initializeMs(1000, CronLoop).start();
+    CronTimer.initializeMs(500, CronLoop).start();
     TempTimer.initializeMs(15000, TempLoop).start();
     SendPresence();
     demo = new NtpClientDemo();
@@ -662,40 +749,35 @@ void testdrawtext(const char text[], uint16_t color)
 
 void init()
 {
-//    HW_pwm.restart();
     Serial.systemDebugOutput(true); // Allow debug output to serial
     debugf("Init!");
 
-    flashled.initializeMs(500, flashaled).start();
     spiffs_mount(); // Mount file system, in order to work with files
     Serial.begin(SERIAL_BAUD_RATE); // 115200 or 9600 by default
     delay(3000);
     
     inter0=false;
-    cron.setAlarm=false;
-    cron.setPower=false;
-    cron.setBuzzer=false;
-    cron.PrintJobs();
     verso=1;
     loadConfig();
-    Serial.println("Dopo load config");
+    commasec=false;
+
 #if LCD == 0
     LcdInitialise();
     LcdClear();
 #else
-    debugf("Display start");
+    Serial.println("Display start");
     startTime = millis();
     SystemClock.setTimeZone(0); 
     // text display tests
     //tft.begin();
     tft.begin();
     //tft.init(4000000);        // optionally init with specific SPI speed (HWSPI)
-    debugf("Init done");
+    Serial.println("Init done");
     debugf("-clearscreen\n");
     tft.fillScreen(ILI9341_BLACK);
     debugf("-Initialized in %d ms\n", millis() - startTime);
     
-    tft.setRotation(1);
+    tft.setRotation(3);
     debugf("-setrotation(2) done");
     tft.setTextSize(2);
     debugf("-seTextSize(2) done");
@@ -704,23 +786,23 @@ void init()
     tft.setCursor(60, 60);
     tft.println("Sming  Framework");
     tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK); // text
-    tft.setCursor(60, 75);
-    tft.println("              v1.1_rtos");
+
     tft.setTextColor(ILI9341_CYAN);
     tft.setCursor(60, 90);
     tft.println("ili9340-40C-41 ");
     tft.setCursor(60, 125);
     tft.println("have fun with Sming");
-//    tft.initR(INITR_144GREENTAB);   // initialize a ST7735S chip, black tab
     Serial.println("Dopo init");
-//    draw_clock();
 
+//    drawButtons();
+    
+    touch.begin(320, 240);  // Must be done before setting rotation
+    touch.setRotation(touch.ROT270);
     
 #endif    
     Serial.println("Dopo init 2");
     ReadTemp.Init(PIN_DHT);                // select PIN It's required for one-wire initialization!
     ReadTemp.StartMeasure(); // first measure start,result after 1.2 seconds * number of sensors
-//    SystemClock.setTimeZone(0);   
 
     WifiStation.enable(true);
     WifiAccessPoint.enable(false);
@@ -729,5 +811,4 @@ void init()
     WifiEvents.onStationConnect(connectOk);
     WifiEvents.onStationDisconnect(connectFail);
     WifiEvents.onStationGotIP(gotIP);
-//    setpwn(LampCfg.lamp);
 }

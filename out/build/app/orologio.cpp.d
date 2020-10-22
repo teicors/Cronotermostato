@@ -257,4 +257,4 @@ app/orologio.o: app/orologio.cpp \
  /home/angelo/Software/Sming-3.8.1/Sming//include/../Wiring/WHashMap.h \
  /home/angelo/Software/Sming-3.8.1/Sming//include/../Wiring/WVector.h \
  /home/angelo/Software/Sming-3.8.1/Sming//include/../Wiring/WString.h \
- include/configuration.h
+ /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Default/configuration.h

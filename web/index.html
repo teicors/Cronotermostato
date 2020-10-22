@@ -22,13 +22,9 @@
     <script src='http://10.10.20.1/templates/dpNumberPicker-2-x.js'></script>
     
     
-    <link rel="stylesheet" href="style.css" />
-    <script src="slider.js"></script>
-    <script src="script.js"></script>
     <script src="http://10.10.20.1/templates/jquery.ui.touch-punch.min.js"></script>
     
-    <script src="jquery-rotaryswitch.js"></script>
-    <link href="jquery-rotaryswitch.css" rel="stylesheet">
+
 
 	
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -44,28 +40,44 @@
     body {
         font-family: Arial, Helvetica, sans-serif;
     }
-
+        .bg {            
+            padding: 10px 15px;
+            border-bottom: 1px solid transparent;
+            border-top-right-radius: 3px;
+            border-top-left-radius: 3px;
+            background-image: linear-gradient(to bottom, #f50000 0, #e8e8e8 100%);
+<!--            background-color: #3FAF00 !important;-->
+        }
+        .bg1 {
+            padding: 10px 15px;
+            border-bottom: 1px solid transparent;
+            border-top-right-radius: 3px;
+            border-top-left-radius: 3px;
+            background-image: linear-gradient(to bottom, #00ff80 0, #088a4b 100%);
+<!--            background-color:#CCCC00 !important; -->
+        }
 </style>
     <script>
     
     $(document).ready(function(){
     
-    		(function worker() {
-			$.getJSON('api/date', function(data) {
-                            var d=Date(data.value);
-                            var n = dateFormat(d); 
-                            document.getElementById('date').innerHTML = n;
-                            setTimeout(worker, 1000);
+    		(function workerMaster() {
+			$.getJSON('api/state', function(data) {
+                            var myDate = new Date(data.Date*1000);
+                            $("#date").text(myDate.toLocaleString());
+                            $("#temp").text(data.Temp+" °C");
+                            if ( data.StatoRelais === 0)  { 
+                                $('.lab0').addClass('bg1');
+                                $('.lab0').removeClass('bg');
+                            } else {
+                                $('.lab0').removeClass('bg1');
+                                $('.lab0').addClass('bg');                                
+                            }
+                                
+                            setTimeout(workerMaster, 1000);
 			});
 		})();
-    
-    		(function worker1() {
-			$.getJSON('api/temp', function(data) {
-                            document.getElementById('temp').innerHTML = data.value+" &deg;C";
-			    setTimeout(worker1, 1000);
-			});
-		})();
-                
+                                
                 dpUI.numberPicker("#np", {
                     min: 17,
                     max: 22,
@@ -92,33 +104,18 @@
         </nav>
         <h3 class="text-muted">Chrono Temp WiFi module</h3>
       </div>
-<div class="row top top-buffer">
-        <div class="col-xs-12">
-          <div class="col-xs-12">
-            <div class="slider sleep" id="slider"></div>
-          </div>
-          <div class="col-xs-12">
-            <div class="slider-controller">
-            <form role="form" class="form form-inline">
-              <select class="form-control">
-                <option value="wake">Wake Up</option>
-                <option value="sleep">Sleep</option>
-              </select>
-              <button class="btn btn-success add">Add Range</button>
-              <button class="btn btn-warning remove">Remove Range</button>
-              </form>
-            </div>
-          </div>
-        </div>
-</div>
+
         <div class="row top top-buffer">
 	  <div class="row">
 		<h2>&nbsp;</h2>
 		<div class="col-xs-offset-2">
 			<div class="col-xs-10 col-md-5">
 			  <div class="panel panel-default">
-				<div class="panel-heading">
-				  <h3 class="text-center panel-title">Data</h3>
+                              <div class="lab0">
+				 <div class="panel-heading">
+                                  
+				    <h3 class="text-center panel-title">Data</h3>
+                                   </div>
 				</div>
 				<div class="panel-body">
 				  <h3 id="date" class="text-center main">{date}</h3>

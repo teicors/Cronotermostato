@@ -13,7 +13,7 @@
 //#include <user_config.h>
 //#include <c_types.h>
 #include <SmingCore.h>
-#include "configuration.h"
+#include <Libraries/Default/configuration.h>
 //#include "Wiring/Print.h"
 
 /*

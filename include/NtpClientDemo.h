@@ -6,7 +6,7 @@
 class NtpClientDemo
 {
 public:
-	NtpClientDemo() : ntpcp("10.10.20.1", 60, NtpTimeResultDelegate(&NtpClientDemo::ntpResult, this))
+	NtpClientDemo() : ntpcp("10.10.0.1", 60, NtpTimeResultDelegate(&NtpClientDemo::ntpResult, this))
 	{
 	}
 

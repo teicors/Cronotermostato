@@ -1,4 +1,5 @@
-app/configuration.o: app/configuration.cpp include/configuration.h \
+app/configuration.o: app/configuration.cpp \
+ /home/angelo/Software/Sming-3.8.1/Sming//Libraries/Default/configuration.h \
  /home/angelo/Software/Sming-3.8.1/Sming//SmingCore/SmingCore.h \
  /home/angelo/Software/Sming-3.8.1/Sming//system/include/gdb_hooks.h \
  /home/angelo/Software/Sming-3.8.1/Sming//include/user_config.h \
